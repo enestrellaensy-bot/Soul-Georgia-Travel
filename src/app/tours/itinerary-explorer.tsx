@@ -1,14 +1,29 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { usePreferences } from "../preferences";
 import { itineraryByLanguage } from "../shared";
 
-export function ItineraryExplorer() {
+type ItineraryItem = {
+  day: number;
+  place: string;
+  title: string;
+  text: string;
+  note: string;
+  image: string;
+};
+
+export function ItineraryExplorer({
+  items,
+  showNote = true,
+}: {
+  items?: readonly ItineraryItem[];
+  showNote?: boolean;
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const { language } = usePreferences();
-  const itinerary = itineraryByLanguage[language];
+  const itinerary = items ?? itineraryByLanguage[language];
   const active = itinerary[activeIndex];
   const copy = {
     ru: { days: "Выберите день маршрута", day: "День", focus: "Главное в этот день", previous: "Предыдущий день", next: "Следующий день", of: "из" },
@@ -25,7 +40,12 @@ export function ItineraryExplorer() {
 
   return (
     <div className="itinerary-explorer">
-      <div className="itinerary-tabs" role="tablist" aria-label={copy.days}>
+      <div
+        className="itinerary-tabs"
+        role="tablist"
+        aria-label={copy.days}
+        style={{ "--itinerary-days": itinerary.length } as CSSProperties}
+      >
         {itinerary.map((item, index) => (
           <button
             key={item.day}
@@ -57,10 +77,12 @@ export function ItineraryExplorer() {
           <span className="eyebrow">{active.place}</span>
           <h2>{active.title}</h2>
           <p>{active.text}</p>
-          <div className="day-note">
-            <span>{copy.focus}</span>
-            <strong>{active.note}</strong>
-          </div>
+          {showNote && (
+            <div className="day-note">
+              <span>{copy.focus}</span>
+              <strong>{active.note}</strong>
+            </div>
+          )}
           <div className="day-progress">
             <span style={{ width: `${((activeIndex + 1) / itinerary.length) * 100}%` }} />
           </div>

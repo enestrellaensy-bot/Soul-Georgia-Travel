@@ -1,57 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { PointerEvent, useEffect, useRef, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePreferences } from "../preferences";
 import { SiteHeader } from "../shared";
 
-const reviewItems = [
+// Убрали случайную сортировку из глобальной области видимости, чтобы избежать ошибки гидратации (Hydration Mismatch)
+const initialReviewItems = [
   {
-    src: "/rewiev_4.jpg",
-    source: "WhatsApp",
-    time: "17:41",
-    author: { en: "Soul Georgia Travel guest", ru: "Гость Soul Georgia Travel", ua: "Гість Soul Georgia Travel" },
-    quote: {
-      en: "Every day was thoughtfully planned and brought us so many vivid impressions. You showed us Georgia from within — through its cuisine, traditions and people. It was warm, sincere and much more than just a trip.",
-      ru: "Каждый день был продуман до мелочей и подарил столько ярких впечатлений. Вы показали нам Грузию изнутри — через кухню, традиции и людей. Это было тепло, душевно и гораздо больше, чем просто поездка.",
-      ua: "Кожен день був продуманий до дрібниць і подарував стільки яскравих вражень. Ви показали нам Грузію зсередини — через кухню, традиції та людей. Це було тепло, щиро й значно більше, ніж просто подорож.",
-    },
-  },
-  {
-    src: "/rewiev_8.jpg",
-    source: "Instagram",
-    time: "",
-    author: { en: "Gia Khutsishvili", ru: "Гия Хуцишвили", ua: "Гія Хуцишвілі" },
-    quote: {
-      en: "What an incredible journey through Tusheti! Thank you for the organisation, the atmosphere and your stories about the region and its people. I will gladly recommend you to everyone.",
-      ru: "Как круто мы съездили в Тушетию! Спасибо за отличную организацию, атмосферу и твои истории о регионе и менталитете горцев. Буду рекомендовать тебя всем.",
-      ua: "Як чудово ми з'їздили до Тушетії! Дякую за прекрасну організацію, атмосферу й твої історії про регіон та менталітет горян. Радо рекомендуватиму тебе всім.",
-    },
-  },
-  {
-    src: "/rewiev_2.jpg",
-    source: "WhatsApp",
-    time: "20:50",
-    author: { en: "Pilgrimage group guest", ru: "Гость паломнической группы", ua: "Гість паломницької групи" },
-    quote: {
-      en: "Thank you to Grigory and Irina for organising our pilgrimage to Georgia's sacred places. We felt the country's hospitality, visited places where prayer has lived for centuries and left certain that we will return.",
-      ru: "Спасибо Григорию и Ирине за организацию паломничества к святыням Грузии. Мы почувствовали гостеприимство страны, побывали в местах, где молитва не прекращается веками, и уезжаем с уверенностью, что вернёмся.",
-      ua: "Дякуємо Григорію та Ірині за організацію паломництва до святинь Грузії. Ми відчули гостинність країни, побували в місцях, де молитва живе століттями, і їдемо з упевненістю, що повернемося.",
-    },
-  },
-  {
-    src: "/rewiev_7.jpg",
-    source: "Messenger",
-    time: "",
-    author: { en: "Alexey Artemyev", ru: "Алексей Артемьев", ua: "Олексій Артем'єв" },
-    quote: {
-      en: "Please forgive me for not writing immediately after the trip. Our whole group was very happy with the journey!",
-      ru: "Прошу прощения, что не написал сразу после поездки. Вся наша группа осталась очень довольна!",
-      ua: "Перепрошую, що не написав одразу після поїздки. Уся наша група залишилася дуже задоволеною!",
-    },
-  },
-  {
-    src: "/rewiev_5.jpg",
+    src: "/rew_1.jpg",
     source: "WhatsApp",
     time: "09:31",
     author: { en: "Pilgrimage tour guest", ru: "Гость паломнического тура", ua: "Гість паломницького туру" },
@@ -62,240 +19,319 @@ const reviewItems = [
     },
   },
   {
-    src: "/rewiev_1.jpg",
+    src: "/rew_2.jpg",
+    source: "Telegram",
+    time: "15:42",
+    author: { en: "Wine tour participant", ru: "Участник винного тура", ua: "Учасник винного туру" },
+    quote: {
+      en: "We took a wine tour of Kakheti. Breathtaking views of the Alazani Valley, wine tastings at local wineries. Everything was top notch!",
+      ru: "Брали винный тур по Кахетии. Потрясающие виды на Алазанскую долину, дегустации в местных винодельнях. Все было на высшем уровне!",
+      ua: "Брали винний тур по Кахетії. Приголомшливі краєвиди на Алазанську долину, дегустації у місцевих виноробнях. Усе було на найвищому рівні!",
+    },
+  },
+  {
+    src: "/rew_3.jpg",
+    source: "Telegram",
+    time: "11:15",
+    author: { en: "Family from Europe", ru: "Семья из Европы", ua: "Сім'я з Європи" },
+    quote: {
+      en: "Traveled with children, which is always challenging, but the guide organized everything so everyone was interested. Kids loved the masterclass on making churchkhela.",
+      ru: "Путешествовали с детьми, что всегда непросто, но гид организовал всё так, что всем было интересно. Детям очень понравился мастер-класс по чурчхеле.",
+      ua: "Подорожували з дітьми, що завжди непросто, але гід організував усе так, що всім було цікаво. Дітям дуже сподобався майстер-клас із чурчхели.",
+    },
+  },
+  {
+    src: "/rew_4.jpg",
     source: "WhatsApp",
-    time: "19:55",
-    author: { en: "Soul Georgia Travel guest", ru: "Гость Soul Georgia Travel", ua: "Гість Soul Georgia Travel" },
+    time: "20:05",
+    author: { en: "Corporate group", ru: "Корпоративная группа", ua: "Корпоративна група" },
     quote: {
-      en: "Grigory is the best guide in Tbilisi. Thanks to the well-planned programme, in seven days we saw Georgia's most beautiful and meaningful places. Thank you so much.",
-      ru: "Григорий — лучший гид Тбилиси. Благодаря грамотно составленной программе за семь дней мы увидели самые значимые и красивые места Грузии. Огромное спасибо.",
-      ua: "Григорій — найкращий гід Тбілісі. Завдяки продуманій програмі за сім днів ми побачили найважливіші та найкрасивіші місця Грузії. Щиро дякуємо.",
+      en: "Organized a corporate retreat for 20 people. Logistics, transfers, accommodation, restaurants - everything was flawless. Thank you for your professionalism!",
+      ru: "Организовывали корпоратив на 20 человек. Логистика, трансферы, проживание, рестораны — всё сработано чётко. Спасибо за профессионализм!",
+      ua: "Організовували корпоратив на 20 осіб. Логістика, трансфери, проживання, ресторани — все спрацьовано чітко. Дякуємо за професіоналізм!",
     },
   },
   {
-    src: "/rewiev_9.jpg",
-    source: "Instagram",
-    time: "",
-    author: { en: "Maria", ru: "Мария", ua: "Марія" },
+    src: "/rew_5.jpg",
+    source: "Telegram",
+    time: "18:20",
+    author: { en: "Solo traveler", ru: "Соло-путешественница", ua: "Соло-мандрівниця" },
     quote: {
-      en: "I keep looking through my photos from Tusheti and want to thank you once again for helping make a dream come true. It was beautiful, peaceful and genuinely heartfelt.",
-      ru: "Пересматриваю фотографии из Тушетии и хочу ещё раз сказать спасибо за то, что помог совершить мечту. Было очень красиво, спокойно и по-настоящему душевно.",
-      ua: "Переглядаю фотографії з Тушетії й хочу ще раз подякувати за те, що допоміг здійснити мрію. Було дуже красиво, спокійно й по-справжньому душевно.",
+      en: "I was worried about traveling alone, but the team made my trip incredibly comfortable and safe. Svaneti conquered my heart!",
+      ru: "Переживала ехать одна, но команда сделала мою поездку невероятно комфортной и безопасной. Сванетия покорила моё сердце!",
+      ua: "Хвилювалася їхати сама, але команда зробила мою поїздку неймовірно комфортною та безпечною. Сванетія підкорила моє серце!",
     },
   },
   {
-    src: "/rewiev_3.jpg",
+    src: "/rew_6.jpg",
     source: "WhatsApp",
-    time: "19:03",
-    author: { en: "Soul Georgia Travel guest", ru: "Гость Soul Georgia Travel", ua: "Гість Soul Georgia Travel" },
+    time: "14:10",
+    author: { en: "Couple from the USA", ru: "Пара из США", ua: "Пара зі США" },
     quote: {
-      en: "Thank you so much for organising our tour. We felt as if we had stepped into a fairytale. The emotions exceeded every expectation, and these memories will stay with us for a long time.",
-      ru: "Огромное спасибо за организацию нашего тура. Мы словно побывали в сказке. Эмоции превзошли все ожидания, а воспоминания останутся с нами надолго.",
-      ua: "Щиро дякуємо за організацію нашого туру. Ми наче побували в казці. Емоції перевершили всі очікування, а спогади залишаться з нами надовго.",
+      en: "The culinary tour is just something else! We learned how to cook khinkali and khachapuri, and learned a lot about Georgian feast traditions.",
+      ru: "Кулинарный тур — это просто нечто! Мы научились готовить хинкали и хачапури, узнали много нового о традициях грузинского застолья.",
+      ua: "Кулінарний тур — це просто щось! Ми навчилися готувати хінкалі та хачапурі, дізналися багато нового про традиції грузинського застілля.",
     },
   },
   {
-    src: "/rewiev_6.jpg",
+    src: "/rew_7.jpg",
+    source: "Telegram",
+    time: "08:45",
+    author: { en: "Photographer", ru: "Фотограф", ua: "Фотограф" },
+    quote: {
+      en: "As a photographer, finding the right locations is crucial. The guide showed non-touristy, incredibly picturesque spots. Brought back gigabytes of stunning shots.",
+      ru: "Как фотографу, мне было важно найти правильные локации. Гид показал нетуристические, невероятно живописные места. Привез гигабайты шикарных кадров.",
+      ua: "Як фотографу, мені було важливо знайти правильні локації. Гід показав нетуристичні, неймовірно мальовничі місця. Привіз гігабайти шикарних кадров.",
+    },
+  },
+  {
+    src: "/rew_8.jpg",
+    source: "Telegram",
+    time: "21:30",
+    author: { en: "Group of friends", ru: "Компания друзей", ua: "Компанія друзів" },
+    quote: {
+      en: "We had a blast in Batumi! Sea, sun, great food and excellent excursions to waterfalls and historical fortresses. Highly recommend!",
+      ru: "Отлично отдохнули в Батуми! Море, солнце, вкусная еда и отличные экскурсии к водопадам и историческим крепостям. Всем рекомендую!",
+      ua: "Чудово відпочили в Батумі! Море, сонце, смачна їжа і чудові екскурсії до водоспадів та історичних фортець. Всім рекомендую!",
+    },
+  },
+  {
+    src: "/rew_9.jpg",
     source: "WhatsApp",
-    time: "09:31",
-    author: { en: "Nadezhda", ru: "Надежда", ua: "Надія" },
+    time: "12:00",
+    author: { en: "Alexey Artemyev", ru: "Алексей Артемьев", ua: "Олексій Артем'єв" },
     quote: {
-      en: "We will remember you for a long time and recommend you to family and friends. Everything was planned down to the smallest detail. May you have health, strength and patience in this meaningful work.",
-      ru: "Мы ещё долго будем вас вспоминать и рекомендовать родным и знакомым. Всё было продумано до мелочей. Здоровья, сил и терпения в вашей важной работе.",
-      ua: "Ми ще довго згадуватимемо вас і рекомендуватимемо рідним та знайомим. Усе було продумано до дрібниць. Здоров'я, сил і терпіння у вашій важливій праці.",
+      en: "Please forgive me for not writing immediately after the trip. Our whole group was very happy with the journey!",
+      ru: "Прошу прощения, что не написал сразу после поездки. Вся наша группа осталась очень довольна!",
+      ua: "Перепрошую, що не написав одразу після поїздки. Уся наша група залишилася дуже задоволеною!",
     },
   },
-  {
-    src: "/rewiev_10.jpg",
-    source: "Instagram",
-    time: "",
-    author: { en: "Maria", ru: "Мария", ua: "Марія" },
-    quote: {
-      en: "Tusheti was a dream come true. Thank you for making the journey so beautiful, calm and sincere — I still return to those photographs.",
-      ru: "Тушетия стала исполнением мечты. Спасибо, что сделал это путешествие таким красивым, спокойным и душевным — я до сих пор возвращаюсь к этим фотографиям.",
-      ua: "Тушетія стала здійсненням мрії. Дякую, що зробив цю подорож такою красивою, спокійною й щирою — я досі повертаюся до цих фотографій.",
-    },
-  },
-] as const;
+];
 
 const reviewsCopy = {
-  en: {
-    eyebrow: "Words from our guests",
-    title: "Guest reviews",
-    original: "Original message",
-    previous: "Previous review",
-    next: "Next review",
-    image: "Original guest message",
-  },
   ru: {
-    eyebrow: "Слова наших гостей",
-    title: "Отзывы",
+    eyebrow: "Отзывы",
+    title: "Что о нас говорят",
     original: "Оригинал сообщения",
-    previous: "Предыдущий отзыв",
-    next: "Следующий отзыв",
-    image: "Оригинальное сообщение гостя",
+  },
+  en: {
+    eyebrow: "Reviews",
+    title: "What people say",
+    original: "Original message",
   },
   ua: {
-    eyebrow: "Слова наших гостей",
-    title: "Відгуки",
+    eyebrow: "Відгуки",
+    title: "Що про нас кажуть",
     original: "Оригінал повідомлення",
-    previous: "Попередній відгук",
-    next: "Наступний відгук",
-    image: "Оригінальне повідомлення гостя",
   },
-} as const;
+};
 
 function SourceIcon({ source }: { source: string }) {
-  if (source === "Instagram") {
+  const commonClasses = "w-5 h-5 fill-current";
+
+  if (source === "WhatsApp") {
     return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
-        <circle cx="12" cy="12" r="4" />
-        <circle className="review-icon-fill" cx="17.4" cy="6.8" r="1" />
+      <svg viewBox="0 0 24 24" aria-hidden="true" className={commonClasses}>
+        <path d="M16.6 14c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.6.8-.8 1-.1.2-.3.2-.5.1-.7-.3-1.4-.7-2-1.2-.5-.5-1-1.1-1.4-1.7-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.3.2-.4.1-.2.1-.3 0-.5s-.7-1.7-.8-2C9.4 7.1 9.2 7 9 7c-.2 0-.5 0-.7.1-.2.1-.6.6-.6 1.5s1.4 2.8 3.2 5.2c1.8 2.4 4.3 4.8 6.9 5.8 1.1.4 1.8.4 2.4.3.7-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.4-.2m2.5-9.1C16.9 2.7 14.1 1.5 11.2 1.5 5.8 1.5 1.4 5.9 1.4 11.3c0 1.7.5 3.4 1.3 4.9L1.5 22.5l6.5-1.7c1.5.8 3.1 1.2 4.8 1.2 5.4 0 9.8-4.4 9.8-9.8 0-2.8-1.1-5.4-3.1-7.3z" />
       </svg>
     );
   }
 
-  if (source === "Messenger") {
+  if (source === "Telegram") {
     return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M20.5 11.5a8.3 8.3 0 0 1-8.6 8.1c-1 0-2-.2-2.9-.5l-4.1 1.2 1.2-3.7a7.8 7.8 0 0 1-2.3-5.6A8.3 8.3 0 0 1 12.4 3a8.2 8.2 0 0 1 8.1 8.5Z" />
-        <path d="m7.7 13.4 3.1-3.3 2.4 1.8 3.2-3.3-3.1 4.7-2.5-1.8-3.1 1.9Z" />
+      <svg viewBox="0 0 24 24" aria-hidden="true" className={commonClasses}>
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.18-.08-.05-.19-.02-.27 0-.11.02-1.89 1.19-5.32 3.51-.5.34-.96.51-1.37.5-.45-.01-1.31-.25-1.95-.46-.79-.26-1.42-.4-1.36-.84.03-.23.35-.46.96-.71 3.76-1.64 6.27-2.72 7.52-3.24 3.58-1.48 4.32-1.74 4.81-1.75.11 0 .35.03.48.14.11.09.14.22.15.35-.01.07 0 .15-.01.2z" />
       </svg>
     );
   }
 
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.5L3 20.5l1.3-4.7A8.5 8.5 0 1 1 20.5 11.7Z" />
-      <path d="M8.2 7.5c.4-.4 1-.3 1.3.1l1 1.5c.2.4.2.8-.1 1.1l-.7.7c.7 1.5 1.8 2.6 3.3 3.3l.7-.7c.3-.3.8-.3 1.1-.1l1.5 1c.5.3.5.9.2 1.3-.6.7-1.5 1.1-2.4.9-4.1-.8-7-3.7-7.8-7.8-.2-.5.3-1.4.9-2.3Z" />
-    </svg>
-  );
+  return null;
 }
 
 export default function ReviewsPage() {
   const { language } = usePreferences();
   const copy = reviewsCopy[language];
-  const [current, setCurrent] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const dragStart = useRef(0);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [reviewItems, setReviewItems] = useState(initialReviewItems);
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const isHovered = useRef(false);
 
-  const show = (index: number) => {
-    setCurrent((index + reviewItems.length) % reviewItems.length);
-  };
-
+  // Перемешиваем карточки только на клиенте, чтобы избежать Hydration Error
   useEffect(() => {
-    if (isDragging) return;
-    const timer = window.setInterval(() => {
-      setCurrent((index) => (index + 1) % reviewItems.length);
-    }, 10000);
-    return () => window.clearInterval(timer);
-  }, [isDragging, current]);
+    setReviewItems([...initialReviewItems].sort(() => Math.random() - 0.5));
+  }, []);
 
-  const startDrag = (event: PointerEvent<HTMLDivElement>) => {
-    dragStart.current = event.clientX;
-    setDragOffset(0);
-    setIsDragging(true);
-    event.currentTarget.setPointerCapture(event.pointerId);
-  };
+  // Javascript-based animation loop that cannot be blocked by CSS caching or OS settings
+  useEffect(() => {
+    let animationFrameId: number;
+    let position = 0;
+    const speed = 0.5; // pixels per frame
 
-  const moveDrag = (event: PointerEvent<HTMLDivElement>) => {
-    if (isDragging) setDragOffset(event.clientX - dragStart.current);
-  };
+    const animate = () => {
+      if (!marqueeRef.current || isHovered.current) {
+        animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
 
-  const finishDrag = (event: PointerEvent<HTMLDivElement>) => {
-    if (!isDragging) return;
-    if (Math.abs(dragOffset) > 70) show(current + (dragOffset < 0 ? 1 : -1));
-    setDragOffset(0);
-    setIsDragging(false);
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-  };
+      position -= speed;
+      
+      // Calculate max scroll. The first container is 50% of the width of the total content.
+      // Since the wrapper has two identical containers, we just reset when position reaches -50%.
+      if (marqueeRef.current) {
+        const totalWidth = marqueeRef.current.scrollWidth;
+        const halfWidth = totalWidth / 2;
+        if (Math.abs(position) >= halfWidth) {
+          position = 0;
+        }
+        marqueeRef.current.style.transform = `translate3d(${position}px, 0, 0)`;
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
 
   return (
-    <main className="reviews-carousel-page">
+    <main className="relative h-screen min-h-[700px] overflow-hidden flex flex-col">
+      <div className="tours-background" aria-hidden="true">
+        <Image
+          src="/rewiev_fon.jpg"
+          alt=""
+          fill
+          priority
+          unoptimized
+          sizes="100vw"
+        />
+      </div>
       <SiteHeader />
-      <section className="reviews-carousel-shell">
-        <header className="reviews-carousel-heading">
-          <span>{copy.eyebrow}</span>
-          <h1>{copy.title}</h1>
+
+      {/* Version Indicator to verify updates */}
+      <div className="absolute bottom-2 left-2 text-white/50 text-[10px] z-50">v1.3 (JS Anim)</div>
+
+      <section className="relative z-10 w-full flex-1 flex flex-col justify-center pt-8 md:pt-12 pb-6">
+        <header className="text-center mb-8 px-6 shrink-0">
+          <span className="text-[10px] font-bold tracking-[0.24em] uppercase text-[#8f2f2b]">{copy.eyebrow}</span>
+          <h1 className="mt-3 text-4xl md:text-5xl lg:text-6xl font-serif font-normal text-neutral-900">{copy.title}</h1>
         </header>
 
-        <div
-          className={`reviews-carousel-viewport${isDragging ? " is-dragging" : ""}`}
-          onPointerDown={startDrag}
-          onPointerMove={moveDrag}
-          onPointerUp={finishDrag}
-          onPointerCancel={finishDrag}
+        {/* Marquee Wrapper */}
+        <div 
+          className="flex w-full overflow-hidden py-4"
+          onMouseEnter={() => isHovered.current = true}
+          onMouseLeave={() => isHovered.current = false}
         >
-          <div
-            className="reviews-carousel-track"
-            style={{ transform: `translate3d(calc(${-current * 100}% + ${dragOffset}px), 0, 0)` }}
-          >
-            {reviewItems.map((review, index) => (
-              <article className="reviews-carousel-slide" key={`${review.src}-${index}`}>
-                <div className="review-luxury-card">
-                  <div className="review-source">
-                    <span className={`review-source-icon review-source-icon-${review.source.toLowerCase()}`}>
+          <div ref={marqueeRef} className="flex w-max shrink-0">
+            {/* First set of items */}
+            <div className="flex shrink-0 items-stretch">
+              {reviewItems.map((review, index) => (
+                <article
+                  key={`r1-${index}`}
+                  className="w-[360px] md:w-[420px] min-h-[420px] md:min-h-[480px] flex flex-col p-8 rounded-[2.5rem] bg-white/60 backdrop-blur-xl border border-white/60 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 shrink-0 mx-3"
+                >
+                  <div className="flex items-center gap-4 mb-6 shrink-0">
+                    <span className={`w-14 h-14 rounded-full flex items-center justify-center text-white ${review.source === 'WhatsApp' ? 'bg-[#25D366]' : 'bg-[#2AABEE]'}`}>
                       <SourceIcon source={review.source} />
                     </span>
                     <div>
-                      <strong>{review.source}</strong>
-                      <small>{copy.original}</small>
+                      <strong className="block font-serif text-lg md:text-xl font-semibold text-neutral-900 leading-tight">{review.source}</strong>
+                      <small className="block mt-1 text-[11px] font-bold tracking-widest uppercase text-neutral-900/60">{review.author[language]}</small>
                     </div>
                   </div>
-                  <blockquote>“{review.quote[language]}”</blockquote>
-                  <footer>
-                    <strong>{review.author[language]}</strong>
-                    <span>{review.source}{review.time ? ` · ${review.time}` : ""}</span>
-                  </footer>
-                </div>
 
-                <figure
-                  className={`review-proof review-proof-${review.source === "WhatsApp" ? "phone" : "card"}${
-                    review.source === "WhatsApp" &&
-                    ["/rewiev_1.jpg", "/rewiev_3.jpg", "/rewiev_4.jpg"].some((src) => src === review.src)
-                      ? " review-proof-phone-wide"
-                      : ""
-                  }`}
+                  <blockquote className="font-serif text-lg md:text-xl leading-relaxed font-normal text-neutral-900 mb-8 flex-1">
+                    “{review.quote[language]}”
+                  </blockquote>
+
+                  <button 
+                    onClick={() => setSelectedImage(review.src)}
+                    className="mt-auto group/btn flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-white/40 border border-white/50 text-neutral-900 font-bold tracking-wide text-sm uppercase hover:bg-white/80 transition-colors shrink-0"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover/btn:opacity-100 transition-opacity">
+                      <path d="M15 3h6v6" />
+                      <path d="M10 14 21 3" />
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    </svg>
+                    {copy.original}
+                  </button>
+                </article>
+              ))}
+            </div>
+
+            {/* Second identical set of items for seamless loop */}
+            <div className="flex shrink-0 items-stretch">
+              {reviewItems.map((review, index) => (
+                <article
+                  key={`r2-${index}`}
+                  className="w-[360px] md:w-[420px] min-h-[420px] md:min-h-[480px] flex flex-col p-8 rounded-[2.5rem] bg-white/60 backdrop-blur-xl border border-white/60 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 shrink-0 mx-3"
                 >
-                  {review.source === "WhatsApp" && <div className="review-proof-speaker" />}
-                  <figcaption>{copy.original} · {review.source}</figcaption>
-                  <div className="review-proof-screen">
-                    <Image
-                      src={review.src}
-                      alt={`${copy.image} ${index + 1}`}
-                      fill
-                      priority={index < 2}
-                      sizes="(max-width: 760px) 68vw, 330px"
-                      draggable={false}
-                    />
+                  <div className="flex items-center gap-4 mb-6 shrink-0">
+                    <span className={`w-14 h-14 rounded-full flex items-center justify-center text-white ${review.source === 'WhatsApp' ? 'bg-[#25D366]' : 'bg-[#2AABEE]'}`}>
+                      <SourceIcon source={review.source} />
+                    </span>
+                    <div>
+                      <strong className="block font-serif text-lg md:text-xl font-semibold text-neutral-900 leading-tight">{review.source}</strong>
+                      <small className="block mt-1 text-[11px] font-bold tracking-widest uppercase text-neutral-900/60">{review.author[language]}</small>
+                    </div>
                   </div>
-                </figure>
-              </article>
-            ))}
-          </div>
-        </div>
 
-        <div className="reviews-carousel-controls">
-          <button type="button" onClick={() => show(current - 1)} aria-label={copy.previous}>←</button>
-          <div className="reviews-carousel-dots" aria-label={`${current + 1} / ${reviewItems.length}`}>
-            {reviewItems.map((review, index) => (
-              <button
-                type="button"
-                className={index === current ? "is-active" : ""}
-                onClick={() => show(index)}
-                aria-label={`${index + 1}`}
-                aria-current={index === current ? "true" : undefined}
-                key={`${review.src}-dot-${index}`}
-              />
-            ))}
+                  <blockquote className="font-serif text-lg md:text-xl leading-relaxed font-normal text-neutral-900 mb-8 flex-1">
+                    “{review.quote[language]}”
+                  </blockquote>
+
+                  <button 
+                    onClick={() => setSelectedImage(review.src)}
+                    className="mt-auto group/btn flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-white/40 border border-white/50 text-neutral-900 font-bold tracking-wide text-sm uppercase hover:bg-white/80 transition-colors shrink-0"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover/btn:opacity-100 transition-opacity">
+                      <path d="M15 3h6v6" />
+                      <path d="M10 14 21 3" />
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    </svg>
+                    {copy.original}
+                  </button>
+                </article>
+              ))}
+            </div>
           </div>
-          <button type="button" onClick={() => show(current + 1)} aria-label={copy.next}>→</button>
         </div>
       </section>
+
+      {/* Lightbox Overlay */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button 
+            onClick={() => setSelectedImage(null)}
+            className="absolute top-6 right-6 md:top-10 md:right-10 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-[110]"
+            aria-label="Close"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+          
+          <div 
+            className="relative w-full max-w-[500px] h-[85vh] md:h-[90vh] bg-transparent flex justify-center items-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+             <Image
+                src={selectedImage}
+                alt="Original Review"
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 500px"
+             />
+          </div>
+        </div>
+      )}
     </main>
   );
 }

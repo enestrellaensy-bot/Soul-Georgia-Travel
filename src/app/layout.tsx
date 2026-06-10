@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { PreferencesProvider } from "./preferences";
 
@@ -34,8 +35,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
+      <body>
+        <Script
+          id="lang-script"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               try {
@@ -46,8 +49,6 @@ export default function RootLayout({
             `,
           }}
         />
-      </head>
-      <body>
         <PreferencesProvider>{children}</PreferencesProvider>
       </body>
     </html>

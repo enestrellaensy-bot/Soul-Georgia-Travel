@@ -25,22 +25,22 @@ const toursCopy = {
 
 const toursData = {
   ru: [
-    { id: 1, title: "Вино и гастрономия", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Тбилиси · Мцхета · Кахетия" },
-    { id: 2, title: "Горы и приключения", image: "/tours_2.webp", href: "#", subtitle: "Сванетия · Казбек · Каньоны" },
-    { id: 3, title: "Древнее наследие", image: "/tours_3.jpg", href: "#", subtitle: "Кутаиси · Вардзия · Уплисцихе" },
-    { id: 4, title: "Рача и дикая природа", image: "/tours_4.jpg", href: "#", subtitle: "Лечхуми · Онский район · Шаори" },
+    { id: 1, title: "Знакомство с Грузией", image: "/logo_tur_1.jpg", href: "/tours/discover-georgia", subtitle: "8 дней · Тбилиси · Кахетия · Казбеги", locked: false },
+    { id: 2, title: "Вино и гастрономия", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Тбилиси · Мцхета · Кахетия", locked: true },
+    { id: 3, title: "Горы и приключения", image: "/tours_2.webp", href: "#", subtitle: "Сванетия · Казбек · Каньоны", locked: true },
+    { id: 4, title: "Древнее наследие", image: "/tours_3.jpg", href: "#", subtitle: "Кутаиси · Вардзия · Уплисцихе", locked: true },
   ],
   ua: [
-    { id: 1, title: "Вино та гастрономія", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Тбілісі · Мцхета · Кахетія" },
-    { id: 2, title: "Гори та пригоди", image: "/tours_2.webp", href: "#", subtitle: "Сванетія · Казбек · Каньйони" },
-    { id: 3, title: "Стародавня спадщина", image: "/tours_3.jpg", href: "#", subtitle: "Кутаїсі · Вардзія · Уплісцихе" },
-    { id: 4, title: "Рача та дика природа", image: "/tours_4.jpg", href: "#", subtitle: "Лечхумі · Онський район · Шаорі" },
+    { id: 1, title: "Знайомство з Грузією", image: "/logo_tur_1.jpg", href: "/tours/discover-georgia", subtitle: "8 днів · Тбілісі · Кахетія · Казбегі", locked: false },
+    { id: 2, title: "Вино та гастрономія", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Тбілісі · Мцхета · Кахетія", locked: true },
+    { id: 3, title: "Гори та пригоди", image: "/tours_2.webp", href: "#", subtitle: "Сванетія · Казбек · Каньйони", locked: true },
+    { id: 4, title: "Стародавня спадщина", image: "/tours_3.jpg", href: "#", subtitle: "Кутаїсі · Вардзія · Уплісцихе", locked: true },
   ],
   en: [
-    { id: 1, title: "Wine & Gastronomy", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Tbilisi · Mtskheta · Kakheti" },
-    { id: 2, title: "Mountains & Adventure", image: "/tours_2.webp", href: "#", subtitle: "Svaneti · Kazbek · Canyons" },
-    { id: 3, title: "Ancient Heritage", image: "/tours_3.jpg", href: "#", subtitle: "Kutaisi · Vardzia · Uplistsikhe" },
-    { id: 4, title: "Racha & Wild Nature", image: "/tours_4.jpg", href: "#", subtitle: "Lechkhumi · Oni District · Shaori" },
+    { id: 1, title: "Discover Georgia", image: "/logo_tur_1.jpg", href: "/tours/discover-georgia", subtitle: "8 days · Tbilisi · Kakheti · Kazbegi", locked: false },
+    { id: 2, title: "Wine & Gastronomy", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Tbilisi · Mtskheta · Kakheti", locked: true },
+    { id: 3, title: "Mountains & Adventure", image: "/tours_2.webp", href: "#", subtitle: "Svaneti · Kazbek · Canyons", locked: true },
+    { id: 4, title: "Ancient Heritage", image: "/tours_3.jpg", href: "#", subtitle: "Kutaisi · Vardzia · Uplistsikhe", locked: true },
   ],
 } as const;
 
@@ -77,7 +77,10 @@ export default function ToursPage() {
             <Link
               key={tour.id}
               href={tour.href}
-              className={`tour-grid-card ${tour.href === "#" ? "is-coming-soon" : ""}`}
+              className={`tour-grid-card ${tour.locked ? "is-locked" : ""}`}
+              aria-disabled={tour.locked}
+              tabIndex={tour.locked ? -1 : undefined}
+              onClick={tour.locked ? (event) => event.preventDefault() : undefined}
             >
               <div className="tour-grid-image-wrapper">
                 <Image
@@ -99,7 +102,14 @@ export default function ToursPage() {
 
               <div className="tour-grid-action-btn" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
+                  {tour.locked ? (
+                    <>
+                      <rect x="5" y="10" width="14" height="10" rx="2" />
+                      <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                    </>
+                  ) : (
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  )}
                 </svg>
               </div>
             </Link>
