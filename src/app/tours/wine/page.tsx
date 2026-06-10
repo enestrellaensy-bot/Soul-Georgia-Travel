@@ -108,10 +108,11 @@ export default function WineTourPage() {
 
       <section className="tour-hero tour-hero-pdf" id="wine-tour">
         <Image
-          src="/georgia_table.png"
+          src="/wine-tour-hero.webp"
           alt={language === "ru" ? "Грузинское застолье и дегустация вина" : "A Georgian table and wine tasting"}
           fill
           priority
+          unoptimized
           sizes="100vw"
           className="cover-image"
         />

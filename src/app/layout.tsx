@@ -33,15 +33,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                var language = localStorage.getItem("sakartvelo-language");
-                document.documentElement.dataset.language = language || "ru";
-                document.documentElement.lang = language || "ru";
+                var language = localStorage.getItem("soul-georgia-language-v2");
+                document.documentElement.dataset.language = language || "en";
+                document.documentElement.lang = language || "en";
               } catch (_) {}
             `,
           }}

@@ -159,10 +159,11 @@ export default function ContactsPage() {
     <main className="contacts-page">
       <div className="contacts-background" aria-hidden="true">
         <Image
-          src="/contact_fon_20260609.jpg"
+          src="/contacts-bg.webp"
           alt=""
           fill
           priority
+          unoptimized
           sizes="100vw"
         />
       </div>

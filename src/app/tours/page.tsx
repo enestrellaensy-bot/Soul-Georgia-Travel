@@ -25,19 +25,19 @@ const toursCopy = {
 
 const toursData = {
   ru: [
-    { id: 1, title: "Вино и гастрономия", image: "/tours_1.jpg", href: "/tours/wine", subtitle: "Тбилиси · Мцхета · Кахетия" },
+    { id: 1, title: "Вино и гастрономия", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Тбилиси · Мцхета · Кахетия" },
     { id: 2, title: "Горы и приключения", image: "/tours_2.webp", href: "#", subtitle: "Сванетия · Казбек · Каньоны" },
     { id: 3, title: "Древнее наследие", image: "/tours_3.jpg", href: "#", subtitle: "Кутаиси · Вардзия · Уплисцихе" },
     { id: 4, title: "Рача и дикая природа", image: "/tours_4.jpg", href: "#", subtitle: "Лечхуми · Онский район · Шаори" },
   ],
   ua: [
-    { id: 1, title: "Вино та гастрономія", image: "/tours_1.jpg", href: "/tours/wine", subtitle: "Тбілісі · Мцхета · Кахетія" },
+    { id: 1, title: "Вино та гастрономія", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Тбілісі · Мцхета · Кахетія" },
     { id: 2, title: "Гори та пригоди", image: "/tours_2.webp", href: "#", subtitle: "Сванетія · Казбек · Каньйони" },
     { id: 3, title: "Стародавня спадщина", image: "/tours_3.jpg", href: "#", subtitle: "Кутаїсі · Вардзія · Уплісцихе" },
     { id: 4, title: "Рача та дика природа", image: "/tours_4.jpg", href: "#", subtitle: "Лечхумі · Онський район · Шаорі" },
   ],
   en: [
-    { id: 1, title: "Wine & Gastronomy", image: "/tours_1.jpg", href: "/tours/wine", subtitle: "Tbilisi · Mtskheta · Kakheti" },
+    { id: 1, title: "Wine & Gastronomy", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Tbilisi · Mtskheta · Kakheti" },
     { id: 2, title: "Mountains & Adventure", image: "/tours_2.webp", href: "#", subtitle: "Svaneti · Kazbek · Canyons" },
     { id: 3, title: "Ancient Heritage", image: "/tours_3.jpg", href: "#", subtitle: "Kutaisi · Vardzia · Uplistsikhe" },
     { id: 4, title: "Racha & Wild Nature", image: "/tours_4.jpg", href: "#", subtitle: "Lechkhumi · Oni District · Shaori" },
@@ -53,10 +53,11 @@ export default function ToursPage() {
     <main className="tours-layout-page">
       <div className="tours-background" aria-hidden="true">
         <Image
-          src="/tours_fon.jpg"
+          src="/tours-bg.webp"
           alt=""
           fill
           priority
+          unoptimized
           sizes="100vw"
         />
       </div>
@@ -84,6 +85,7 @@ export default function ToursPage() {
                   alt={tour.title}
                   fill
                   priority={tour.id <= 2}
+                  unoptimized={tour.id === 1}
                   sizes="(max-width: 1100px) 100vw, 30vw"
                   className="cover-image tour-grid-img"
                 />

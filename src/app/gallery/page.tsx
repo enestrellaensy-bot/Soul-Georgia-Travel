@@ -427,6 +427,7 @@ export default function GalleryPage() {
                         src={img.src}
                         alt={img.alt}
                         fill
+                        priority={idx < 2}
                         draggable={false}
                         sizes="25vw"
                         className="cover-image"

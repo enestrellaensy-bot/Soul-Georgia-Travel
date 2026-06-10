@@ -97,10 +97,11 @@ export default function Home() {
       >
         <Image
           ref={imageRef}
-          src="/621304-3252x1829-desktop-hd-georgia-wallpaper-image.jpg"
+          src="/home-hero.webp"
           alt={copy.country}
           fill
           priority
+          unoptimized
           sizes="100vw"
           className="cover-image"
         />

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePreferences } from "../preferences";
 import { itineraryByLanguage } from "../shared";
 
@@ -15,6 +15,13 @@ export function ItineraryExplorer() {
     ua: { days: "Оберіть день маршруту", day: "День", focus: "Головне цього дня", previous: "Попередній день", next: "Наступний день", of: "з" },
     en: { days: "Choose an itinerary day", day: "Day", focus: "Highlights of the day", previous: "Previous day", next: "Next day", of: "of" },
   }[language];
+
+  useEffect(() => {
+    itinerary.forEach((item) => {
+      const image = new window.Image();
+      image.src = item.image;
+    });
+  }, [itinerary]);
 
   return (
     <div className="itinerary-explorer">
