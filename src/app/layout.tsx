@@ -3,26 +3,26 @@ import "./globals.css";
 import { PreferencesProvider } from "./preferences";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sakartvelo.travel"),
+  metadataBase: new URL("https://soul-georgia-travel.vercel.app"),
   title: {
-    default: "Sakartvelo — авторские путешествия по Грузии",
-    template: "%s | Sakartvelo",
+    default: "Soul Georgia Travel",
+    template: "%s | Soul Georgia Travel",
   },
   description:
-    "Авторские туры по Грузии: вино, гастрономия, история и небольшие группы.",
+    "Small-group journeys through Georgia, shaped around its people, food, wine, history and landscapes.",
   keywords: [
-    "авторские туры в Грузию",
-    "вино-гастрономический тур Грузия",
-    "Кахетия",
-    "Уплисцихе",
-    "мини-группа",
+    "Georgia tours",
+    "small group tours Georgia",
+    "wine tour Georgia",
+    "gastronomy tour Georgia",
+    "Soul Georgia Travel",
   ],
   openGraph: {
-    title: "Sakartvelo — Грузия, которую проживают",
+    title: "Soul Georgia Travel",
     description:
-      "Вино-гастрономическое путешествие через Тбилиси, Мцхету, Кахетию, Болниси и Уплисцихе.",
-    images: ["/georgia_hero.png"],
-    locale: "ru_RU",
+      "Thoughtful small-group journeys through Georgia with personal support from arrival to departure.",
+    images: ["/home-hero.webp"],
+    locale: "en_US",
     type: "website",
   },
 };

@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Travel Request",
+  title: "Wine & Gastronomy Tour",
   description:
-    "Tell us about the journey you would like to plan in Georgia.",
+    "A seven-day small-group journey through Tbilisi, Mtskheta, Kakheti, Bolnisi and Uplistsikhe.",
 };
 
-export default function BookingLayout({
+export default function WineTourLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

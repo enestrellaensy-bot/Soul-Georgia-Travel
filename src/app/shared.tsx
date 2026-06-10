@@ -302,7 +302,7 @@ export function SiteHeader() {
         </nav>
 
         {/* Center: Brand */}
-        <Link href="/" className="brand brand-luxury" aria-label="Sakartvelo, home">
+        <Link href="/" className="brand brand-luxury" aria-label="Soul Georgia Travel, home">
           <img src="/main_4_clean.png" alt="Soul Georgia Travel" className="brand-logo-img" />
         </Link>
 

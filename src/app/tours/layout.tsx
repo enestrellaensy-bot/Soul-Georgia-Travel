@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Наши туры — вино и гастрономия Грузии",
+  title: "Tours",
   description:
-    "Вино-гастрономический тур по Грузии на 7 дней: Тбилиси, Мцхета, Кахетия, Болниси и Уплисцихе.",
+    "Explore signature small-group routes through Georgia.",
 };
 
 export default function ToursLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Истории гостей",
-  description: "Впечатления гостей от путешествий по Тбилиси, Кахетии и Казбеги.",
+  title: "Guest Reviews",
+  description: "Original messages and stories from Soul Georgia Travel guests.",
 };
 
 export default function ReviewsLayout({ children }: Readonly<{ children: React.ReactNode }>) {

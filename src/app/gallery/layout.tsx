@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Travel Request",
-  description:
-    "Tell us about the journey you would like to plan in Georgia.",
+  title: "Gallery",
+  description: "Places, landscapes and moments from journeys through Georgia.",
 };
 
-export default function BookingLayout({
+export default function GalleryLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
