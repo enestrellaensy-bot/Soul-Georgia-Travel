@@ -6,11 +6,11 @@ import { PreferencesProvider } from "./preferences";
 export const metadata: Metadata = {
   metadataBase: new URL("https://soul-georgia-travel.vercel.app"),
   title: {
-    default: "Soul Georgia Travel",
+    default: "Soul Georgia Travel — авторские туры по Грузии",
     template: "%s | Soul Georgia Travel",
   },
   description:
-    "Small-group journeys through Georgia, shaped around its people, food, wine, history and landscapes.",
+    "Авторские путешествия по Грузии: небольшие группы, продуманные маршруты, культура, кухня, вино и природа.",
   keywords: [
     "Georgia tours",
     "small group tours Georgia",
@@ -19,12 +19,18 @@ export const metadata: Metadata = {
     "Soul Georgia Travel",
   ],
   openGraph: {
-    title: "Soul Georgia Travel",
+    title: "Soul Georgia Travel — авторские туры по Грузии",
     description:
-      "Thoughtful small-group journeys through Georgia with personal support from arrival to departure.",
-    images: ["/home-hero.webp"],
-    locale: "en_US",
+      "Небольшие группы, продуманные маршруты и настоящая Грузия — от Тбилиси до гор и виноградников.",
+    images: [{ url: "/home-hero.webp", width: 1200, height: 630, alt: "Soul Georgia Travel" }],
+    locale: "ru_RU",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Soul Georgia Travel — авторские туры по Грузии",
+    description: "Небольшие группы и продуманные путешествия по Грузии.",
+    images: ["/home-hero.webp"],
   },
 };
 
