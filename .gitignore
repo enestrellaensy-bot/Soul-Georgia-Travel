@@ -30,6 +30,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+.next-start*.log
 
 # env files (can opt-in for committing if needed)
 .env*
@@ -48,6 +49,8 @@ RESEARCH.md
 # unused source references kept outside the public assets
 o_nas_1.webp
 tmb_272706_145927.jpg
+/public/621304-3252x1829-desktop-hd-georgia-wallpaper-image.jpg
+/public/tours_fon.jpg
 
 # typescript
 *.tsbuildinfo

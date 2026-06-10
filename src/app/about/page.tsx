@@ -234,12 +234,16 @@ export default function AboutPage() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "ArrowLeft") show(current - 1);
-      if (event.key === "ArrowRight") show(current + 1);
+      if (event.key === "ArrowLeft") {
+        setCurrent((value) => Math.max(0, value - 1));
+      }
+      if (event.key === "ArrowRight") {
+        setCurrent((value) => Math.min(blocks.length - 1, value + 1));
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [current]);
+  }, [blocks.length]);
 
   return (
     <main className={styles.page}>

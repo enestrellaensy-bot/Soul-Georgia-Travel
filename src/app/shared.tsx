@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Language, usePreferences } from "./preferences";
@@ -181,106 +182,18 @@ export const itineraryByLanguage = {
   ],
 } as const;
 
-export const reviewsByLanguage = {
-  ru: [
-    {
-      quote: "Нас не водили по программе, а знакомили со своими друзьями. В Кахетии мы просидели за столом на два часа дольше — и никто не торопил.",
-      name: "Мария и Антон",
-      city: "Варшава",
-      trip: "Кахетия и Казбеги, сентябрь",
-    },
-    {
-      quote: "Идеальный баланс: утром горы, вечером хороший отель и вино. Ни одного дня, после которого хотелось просто закрыться в номере.",
-      name: "Ольга",
-      city: "Берлин",
-      trip: "Соло в мини-группе, июнь",
-    },
-    {
-      quote: "Ехали за едой и пейзажами, а вернулись с историями про людей. Маршрут ощущается очень личным.",
-      name: "Денис и Лена",
-      city: "Прага",
-      trip: "Вино и горы, октябрь",
-    },
-  ],
-  ua: [
-    {
-      quote: "Нас не водили за програмою, а знайомили зі своїми друзями. У Кахетії ми просиділи за столом на дві години довше — і ніхто не поспішав.",
-      name: "Марія та Антон",
-      city: "Варшава",
-      trip: "Кахетія та Казбегі, вересень",
-    },
-    {
-      quote: "Ідеальний баланс: вранці гори, увечері гарний готель і вино. Жодного дня, після якого хотілося просто зачинитися в номері.",
-      name: "Ольга",
-      city: "Берлін",
-      trip: "Соло в малій групі, червень",
-    },
-    {
-      quote: "Їхали за їжею та краєвидами, а повернулися з історіями про людей. Маршрут відчувається дуже особистим.",
-      name: "Денис і Лена",
-      city: "Прага",
-      trip: "Вино та гори, жовтень",
-    },
-  ],
-  en: [
-    {
-      quote: "It never felt like being led through a programme. It felt like meeting friends. In Kakheti, lunch ran two hours late and nobody rushed us.",
-      name: "Maria & Anton",
-      city: "Warsaw",
-      trip: "Kakheti and Kazbegi, September",
-    },
-    {
-      quote: "The right balance: mountains in the morning, a beautiful hotel and wine in the evening. Not one exhausting day.",
-      name: "Olga",
-      city: "Berlin",
-      trip: "Solo in a small group, June",
-    },
-    {
-      quote: "We came for food and landscapes and returned with stories about people. The whole route felt deeply personal.",
-      name: "Denis & Lena",
-      city: "Prague",
-      trip: "Wine and mountains, October",
-    },
-  ],
-} as const;
-
-function Mark() {
-  return (
-    <svg viewBox="0 0 54 54" aria-hidden="true">
-      <path d="M7 39 20 15l7 12 6-10 14 22" />
-      <path d="M13 39h29M21 33l6-6 6 6" />
-      <circle cx="27" cy="27" r="23" />
-    </svg>
-  );
-}
-
-export function Arrow({ direction = "right" }: { direction?: "right" | "down" }) {
-  return (
-    <span className={`arrow arrow-${direction}`} aria-hidden="true">
-      <svg viewBox="0 0 24 24">
-        <path d="M4 12h15M14 6l6 6-6 6" />
-      </svg>
-    </span>
-  );
-}
-
 const sharedCopy = {
   ru: {
     nav: ["Туры", "О нас", "Галерея", "Отзывы", "Контакты"],
     menu: "Открыть меню",
-    theme: "Переключить цветовую тему",
-    copyright: "© 2025. Авторские туры по Грузии",
   },
   ua: {
     nav: ["Тури", "Про нас", "Галерея", "Відгуки", "Контакти"],
     menu: "Відкрити меню",
-    copyright: "© 2025. Авторські тури Грузією",
   },
   en: {
     nav: ["Tours", "About us", "Gallery", "Reviews", "Contacts"],
     menu: "Open menu",
-    theme: "Switch colour theme",
-    copyright: "© 2025. Signature tours in Georgia",
   },
 } as const;
 
@@ -303,7 +216,15 @@ export function SiteHeader() {
 
         {/* Center: Brand */}
         <Link href="/" className="brand brand-luxury" aria-label="Soul Georgia Travel, home">
-          <img src="/main_4_clean.png" alt="Soul Georgia Travel" className="brand-logo-img" />
+          <Image
+            src="/main_4_clean.png"
+            alt="Soul Georgia Travel"
+            width={1506}
+            height={314}
+            sizes="220px"
+            priority
+            className="brand-logo-img"
+          />
         </Link>
 
         {/* Right Side: About, Contacts */}
@@ -341,7 +262,6 @@ export function SiteHeader() {
             <Link href="/reviews">{copy.nav[3]}</Link>
             <Link href="/about">{copy.nav[1]}</Link>
             <Link href="/contacts">{copy.nav[4]}</Link>
-            <a href="tel:+995555017407">+995 555 01 74 07</a>
           </div>
         </details>
       </div>
@@ -349,13 +269,10 @@ export function SiteHeader() {
   );
 }
 
-export function SiteFooter({ children }: { children?: React.ReactNode }) {
-  const { language } = usePreferences();
-  const copy = sharedCopy[language];
-
+export function SiteFooter({ children }: { children: React.ReactNode }) {
   return (
     <footer className="site-footer site-footer-minimal">
-      <span className="footer-copyright">{children ?? copy.copyright}</span>
+      <span className="footer-copyright">{children}</span>
     </footer>
   );
 }

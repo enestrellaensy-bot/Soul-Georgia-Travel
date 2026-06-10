@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { usePreferences } from "../../preferences";
-import { SiteFooter, SiteHeader } from "../../shared";
+import { SiteHeader } from "../../shared";
 import { ItineraryExplorer } from "../itinerary-explorer";
 
 const wineTourCopy = {
@@ -164,8 +164,6 @@ export default function WineTourPage() {
           </div>
         </div>
       </section>
-
-      <SiteFooter />
     </main>
   );
 }

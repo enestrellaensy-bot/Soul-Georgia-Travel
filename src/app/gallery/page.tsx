@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { usePreferences } from "../preferences";
-import { PageIntro, SiteFooter, SiteHeader } from "../shared";
+import { SiteHeader } from "../shared";
 
 const locations = [
   { id: "tbilisi", ru: "Тбилиси", ua: "Тбілісі", en: "Tbilisi" },
@@ -543,12 +543,12 @@ export default function GalleryPage() {
 
             {/* Image container */}
             <div style={{ position: "relative", width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-              <img
+              <Image
                 src={filteredImages[lightboxIndex].src}
                 alt={filteredImages[lightboxIndex].alt}
+                fill
+                sizes="100vw"
                 style={{
-                  maxHeight: "100%",
-                  maxWidth: "100%",
                   objectFit: "contain",
                   borderRadius: "1px",
                 }}
