@@ -19,8 +19,8 @@ export const itineraryByLanguage = {
     {
       day: "02",
       place: "Мцхета",
-      title: "Древняя столица и Iago's Winery",
-      text: "Светицховели, монастырь Джвари и дегустация авторских вин в Iago's Winery. Вечером возвращаемся в Тбилиси.",
+      title: "Древняя столица и семейная винодельня",
+      text: "Светицховели, монастырь Джвари и дегустация авторских вин на семейной винодельне. Вечером возвращаемся в Тбилиси.",
       image: "/georgia_wine.png",
       note: "Светицховели / Джвари / авторские вина",
     },
@@ -77,8 +77,8 @@ export const itineraryByLanguage = {
     {
       day: "02",
       place: "Мцхета",
-      title: "Давня столиця та Iago's Winery",
-      text: "Светіцховелі, монастир Джварі та дегустація авторських вин в Iago's Winery. Увечері повертаємося до Тбілісі.",
+      title: "Давня столиця та сімейна виноробня",
+      text: "Светіцховелі, монастир Джварі та дегустація авторських вин на сімейній виноробні. Увечері повертаємося до Тбілісі.",
       image: "/georgia_wine.png",
       note: "Светіцховелі / Джварі / авторські вина",
     },
@@ -135,8 +135,8 @@ export const itineraryByLanguage = {
     {
       day: "02",
       place: "Mtskheta",
-      title: "The ancient capital and Iago's Winery",
-      text: "Svetitskhoveli, Jvari Monastery and a tasting of signature wines at Iago's Winery.",
+      title: "The ancient capital and a family winery",
+      text: "Svetitskhoveli, Jvari Monastery and a tasting of signature wines at a family winery.",
       image: "/georgia_wine.png",
       note: "Svetitskhoveli / Jvari / signature wines",
     },
