@@ -16,14 +16,17 @@ const contactsCopy = {
     modalTitle: "Расскажите, как с вами связаться",
     name: "Ваше имя",
     contact: "Телефон, email или ник",
+    departureCity: "Из какого города вылет?",
     channel: "Удобный способ связи",
     message: "Что уже знаете о поездке?",
     messagePlaceholder: "Даты, количество гостей, пожелания",
     submit: "Отправить заявку",
+    submitting: "Отправляем...",
+    sendError: "Не удалось отправить. Попробуйте ещё раз.",
     sent: "Спасибо. Форма заполнена.",
     sentText: "После подключения Telegram или почты заявка будет уходить туда автоматически.",
     close: "Закрыть",
-    channels: ["Telegram", "WhatsApp", "Viber", "Email", "Instagram"],
+    channels: ["Telegram", "Email", "Instagram"],
   },
   ua: {
     eyebrow: "Зв'язатися з нами",
@@ -35,14 +38,17 @@ const contactsCopy = {
     modalTitle: "Розкажіть, як з вами зв'язатися",
     name: "Ваше ім'я",
     contact: "Телефон, email або нік",
+    departureCity: "З якого міста виліт?",
     channel: "Зручний спосіб зв'язку",
     message: "Що вже знаєте про поїздку?",
     messagePlaceholder: "Дати, кількість гостей, побажання",
     submit: "Надіслати заявку",
+    submitting: "Надсилаємо...",
+    sendError: "Не вдалося надіслати. Спробуйте ще раз.",
     sent: "Дякуємо. Форму заповнено.",
     sentText: "Після підключення Telegram або пошти заявка надсилатиметься туди автоматично.",
     close: "Закрити",
-    channels: ["Telegram", "WhatsApp", "Viber", "Email", "Instagram"],
+    channels: ["Telegram", "Email", "Instagram"],
   },
   en: {
     eyebrow: "Get in touch",
@@ -54,23 +60,24 @@ const contactsCopy = {
     modalTitle: "Tell us how to reach you",
     name: "Your name",
     contact: "Phone, email or username",
+    departureCity: "Which city are you flying from?",
     channel: "Preferred contact method",
     message: "What do you already know about the trip?",
     messagePlaceholder: "Dates, number of guests, preferences",
     submit: "Send request",
+    submitting: "Sending...",
+    sendError: "Could not send the request. Please try again.",
     sent: "Thank you. The form is complete.",
     sentText: "Once Telegram or email is connected, requests will be delivered there automatically.",
     close: "Close",
-    channels: ["Telegram", "WhatsApp", "Viber", "Email", "Instagram"],
+    channels: ["Telegram", "Email", "Instagram"],
   },
 } as const;
 
 const contactMethods = [
-  { name: "Telegram", icon: "telegram" },
-  { name: "Instagram", icon: "instagram" },
-  { name: "Почта", icon: "email" },
-  { name: "Viber", icon: "viber" },
-  { name: "WhatsApp", icon: "whatsapp" },
+  { name: "Telegram", icon: "telegram", href: "https://t.me/SoulGeorgiaTravel" },
+  { name: "Instagram", icon: "instagram", href: "https://www.instagram.com/gri_tour_geo" },
+  { name: "Почта", icon: "email", href: "mailto:vpavlovich856@gmail.com" },
 ] as const;
 
 function ContactIcon({
@@ -105,22 +112,7 @@ function ContactIcon({
     );
   }
 
-  if (name === "viber") {
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M19.7 4.7C17.8 2.9 14.9 2 12 2 6.6 2 3 5.2 3 10c0 2 .6 3.8 1.8 5.3L4 20l4.8-1.3c1 .4 2.1.6 3.2.6 5.4 0 9-3.2 9-8 0-2.6-.4-4.8-1.3-6.6Z" />
-        <path d="M8.3 7.2c.4-.4 1-.3 1.3.1l1 1.5c.2.4.2.8-.1 1.1l-.7.7c.7 1.5 1.8 2.6 3.3 3.3l.7-.7c.3-.3.8-.3 1.1-.1l1.5 1c.5.3.5.9.2 1.3-.6.7-1.5 1.1-2.4.9-4.1-.8-7-3.7-7.8-7.8-.2-.5.3-1.4.9-2.3Z" />
-        <path d="M13 5.7c2.8.3 4.4 1.9 4.7 4.7M13.1 8.1c1.4.2 2.1.9 2.3 2.3" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.5L3 20.5l1.3-4.7A8.5 8.5 0 1 1 20.5 11.7Z" />
-      <path d="M8.2 7.5c.4-.4 1-.3 1.3.1l1 1.5c.2.4.2.8-.1 1.1l-.7.7c.7 1.5 1.8 2.6 3.3 3.3l.7-.7c.3-.3.8-.3 1.1-.1l1.5 1c.5.3.5.9.2 1.3-.6.7-1.5 1.1-2.4.9-4.1-.8-7-3.7-7.8-7.8-.2-.5.3-1.4.9-2.3Z" />
-    </svg>
-  );
+  return null;
 }
 
 export default function ContactsPage() {
@@ -128,6 +120,8 @@ export default function ContactsPage() {
   const copy = contactsCopy[language];
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isSent, setIsSent] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [sendError, setSendError] = useState("");
 
   useEffect(() => {
     if (!isFormOpen) return;
@@ -145,13 +139,37 @@ export default function ContactsPage() {
     };
   }, [isFormOpen]);
 
-  const submitForm = (event: FormEvent<HTMLFormElement>) => {
+  const submitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsSent(true);
+    setIsSubmitting(true);
+    setSendError("");
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(formData.entries())),
+      });
+
+      if (!response.ok) {
+        setSendError(copy.sendError);
+        return;
+      }
+
+      setIsSent(true);
+      form.reset();
+    } catch {
+      setSendError(copy.sendError);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const openForm = () => {
     setIsSent(false);
+    setSendError("");
     setIsFormOpen(true);
   };
 
@@ -177,7 +195,13 @@ export default function ContactsPage() {
 
         <div className="contacts-grid">
           {contactMethods.map((method) => (
-            <button className="contact-method" type="button" key={method.name}>
+            <a
+              className="contact-method"
+              href={method.href}
+              target={method.icon === "email" ? undefined : "_blank"}
+              rel={method.icon === "email" ? undefined : "noreferrer"}
+              key={method.name}
+            >
               <span className={`contact-method-icon contact-method-icon-${method.icon}`}>
                 <ContactIcon name={method.icon} />
               </span>
@@ -186,7 +210,7 @@ export default function ContactsPage() {
                 <small>{copy.action}</small>
               </span>
               <span className="contact-method-arrow" aria-hidden="true">↗</span>
-            </button>
+            </a>
           ))}
 
           <button className="contact-method contact-method-request" type="button" onClick={openForm}>
@@ -230,13 +254,23 @@ export default function ContactsPage() {
                 <span className="eyebrow">{copy.modalEyebrow}</span>
                 <h2 id="contact-form-title">{copy.modalTitle}</h2>
                 <form className="contact-form" onSubmit={submitForm}>
+                  <div className="contact-form-honeypot" aria-hidden="true">
+                    <label>
+                      Website
+                      <input name="website" type="text" tabIndex={-1} autoComplete="off" />
+                    </label>
+                  </div>
                   <label>
                     <span>{copy.name}</span>
-                    <input name="name" type="text" autoComplete="name" required />
+                    <input name="name" type="text" autoComplete="name" maxLength={80} required />
                   </label>
                   <label>
                     <span>{copy.contact}</span>
-                    <input name="contact" type="text" autoComplete="email" required />
+                    <input name="contact" type="text" autoComplete="email" maxLength={120} required />
+                  </label>
+                  <label>
+                    <span>{copy.departureCity}</span>
+                    <input name="departureCity" type="text" autoComplete="address-level2" maxLength={100} required />
                   </label>
                   <label>
                     <span>{copy.channel}</span>
@@ -248,10 +282,11 @@ export default function ContactsPage() {
                   </label>
                   <label>
                     <span>{copy.message}</span>
-                    <textarea name="message" rows={3} placeholder={copy.messagePlaceholder} />
+                    <textarea name="message" rows={3} maxLength={1500} placeholder={copy.messagePlaceholder} />
                   </label>
-                  <button className="contact-form-submit" type="submit">
-                    {copy.submit}
+                  {sendError && <p className="contact-form-error">{sendError}</p>}
+                  <button className="contact-form-submit" type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? copy.submitting : copy.submit}
                     <span aria-hidden="true">→</span>
                   </button>
                 </form>

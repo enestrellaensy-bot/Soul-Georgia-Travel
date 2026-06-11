@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { usePreferences } from "./preferences";
-import { SiteFooter, SiteHeader } from "./shared";
+import { SiteHeader } from "./shared";
 
 const homeCopy = {
   en: {
@@ -68,11 +68,17 @@ export default function Home() {
   const currentRef = useRef({ x: 0, y: 0 });
 
   const moveBackground = (event: React.MouseEvent<HTMLElement>) => {
+    if (window.matchMedia("(max-width: 800px)").matches) return;
     targetRef.current.x = event.clientX / window.innerWidth - 0.5;
     targetRef.current.y = event.clientY / window.innerHeight - 0.5;
   };
 
   useEffect(() => {
+    if (window.matchMedia("(max-width: 800px)").matches) {
+      if (imageRef.current) imageRef.current.style.transform = "none";
+      return;
+    }
+
     let frame = 0;
     const animate = () => {
       const current = currentRef.current;
@@ -116,9 +122,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <SiteFooter>
-        <span>© 2025–2026 Soul Georgia Travel™</span>
-      </SiteFooter>
     </main>
   );
 }

@@ -6,12 +6,13 @@ import { usePreferences } from "../preferences";
 import { itineraryByLanguage } from "../shared";
 
 type ItineraryItem = {
-  day: number;
+  day: number | string;
   place: string;
   title: string;
   text: string;
   note: string;
   image: string;
+  position?: string;
 };
 
 export function ItineraryExplorer({
@@ -22,8 +23,9 @@ export function ItineraryExplorer({
   showNote?: boolean;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
   const { language } = usePreferences();
-  const itinerary = items ?? itineraryByLanguage[language];
+  const itinerary: readonly ItineraryItem[] = items ?? itineraryByLanguage[language];
   const active = itinerary[activeIndex];
   const copy = {
     ru: { days: "Выберите день маршрута", day: "День", focus: "Главное в этот день", previous: "Предыдущий день", next: "Следующий день", of: "из" },
@@ -37,6 +39,22 @@ export function ItineraryExplorer({
       image.src = item.image;
     });
   }, [itinerary]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+    if (diff > 50) {
+      setActiveIndex((prev) => (prev + 1) % itinerary.length);
+    } else if (diff < -50) {
+      setActiveIndex((prev) => (prev - 1 + itinerary.length) % itinerary.length);
+    }
+    setTouchStart(null);
+  };
 
   return (
     <div className="itinerary-explorer">
@@ -61,7 +79,7 @@ export function ItineraryExplorer({
         ))}
       </div>
 
-      <article className="active-itinerary" role="tabpanel">
+      <article className="active-itinerary" role="tabpanel" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
         <div className="active-itinerary-image">
           <Image
             key={active.image}
@@ -70,6 +88,7 @@ export function ItineraryExplorer({
             fill
             sizes="(max-width: 900px) 100vw, 58vw"
             className="cover-image"
+            style={{ objectPosition: active.position || "center" }}
           />
           <span className="day-stamp">{copy.day} {active.day}</span>
         </div>

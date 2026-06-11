@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
 import { PreferencesProvider } from "./preferences";
+
+const manrope = localFont({
+  src: "../../public/fonts/manrope-variable.woff2",
+  display: "swap",
+  variable: "--font-manrope",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://soul-georgia-travel.vercel.app"),
@@ -40,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={manrope.variable}>
       <body>
         <Script
           id="lang-script"
@@ -56,6 +63,9 @@ export default function RootLayout({
           }}
         />
         <PreferencesProvider>{children}</PreferencesProvider>
+        <footer className="site-footer site-footer-minimal global-site-footer">
+          <span className="footer-copyright">© 2025–2026 Soul Georgia Travel™</span>
+        </footer>
       </body>
     </html>
   );

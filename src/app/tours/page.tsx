@@ -18,29 +18,29 @@ const toursCopy = {
   },
   en: {
     overviewEyebrow: "Signature routes through Georgia",
-    overviewTitle: "Journeys with character",
+    overviewTitle: "Travels with character",
     overviewText: "Small groups, thoughtful routes and a way into the country through its people, food, wine and history. Choose your route.",
   },
 } as const;
 
 const toursData = {
   ru: [
-    { id: 1, title: "Знакомство с Грузией", image: "/logo_tur_1.jpg", href: "/tours/discover-georgia", subtitle: "8 дней · Тбилиси · Кахетия · Казбеги", locked: false },
-    { id: 2, title: "Вино и гастрономия", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Тбилиси · Мцхета · Кахетия", locked: true },
-    { id: 3, title: "Горы и приключения", image: "/tours_2.webp", href: "#", subtitle: "Сванетия · Казбек · Каньоны", locked: true },
-    { id: 4, title: "Древнее наследие", image: "/tours_3.jpg", href: "#", subtitle: "Кутаиси · Вардзия · Уплисцихе", locked: true },
+    { id: 1, title: "Знакомство с Грузией", image: "/tour1_logo.jpg", href: "/tours/discover-georgia", subtitle: "8 дней · Тбилиси · Кахетия · Казбеги", locked: false },
+    { id: 2, title: "Винно-гастрономический", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Тбилиси · Мцхета · Кахетия", locked: true },
+    { id: 3, title: "Горы и приключения", image: "/mcheti/mcheti_1.jpg", href: "#", subtitle: "Сванетия · Казбек · Каньоны", locked: true },
+    { id: 4, title: "Древнее наследие", image: "/samche/2.jpg", href: "#", subtitle: "Кутаиси · Вардзия · Уплисцихе", locked: true },
   ],
   ua: [
-    { id: 1, title: "Знайомство з Грузією", image: "/logo_tur_1.jpg", href: "/tours/discover-georgia", subtitle: "8 днів · Тбілісі · Кахетія · Казбегі", locked: false },
-    { id: 2, title: "Вино та гастрономія", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Тбілісі · Мцхета · Кахетія", locked: true },
-    { id: 3, title: "Гори та пригоди", image: "/tours_2.webp", href: "#", subtitle: "Сванетія · Казбек · Каньйони", locked: true },
-    { id: 4, title: "Стародавня спадщина", image: "/tours_3.jpg", href: "#", subtitle: "Кутаїсі · Вардзія · Уплісцихе", locked: true },
+    { id: 1, title: "Знайомство з Грузією", image: "/tour1_logo.jpg", href: "/tours/discover-georgia", subtitle: "8 днів · Тбілісі · Кахетія · Казбегі", locked: false },
+    { id: 2, title: "Винно-гастрономічний", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Тбілісі · Мцхета · Кахетія", locked: true },
+    { id: 3, title: "Гори та пригоди", image: "/mcheti/mcheti_1.jpg", href: "#", subtitle: "Сванетія · Казбек · Каньйони", locked: true },
+    { id: 4, title: "Стародавня спадщина", image: "/samche/2.jpg", href: "#", subtitle: "Кутаїсі · Вардзія · Уплісцихе", locked: true },
   ],
   en: [
-    { id: 1, title: "Discover Georgia", image: "/logo_tur_1.jpg", href: "/tours/discover-georgia", subtitle: "8 days · Tbilisi · Kakheti · Kazbegi", locked: false },
+    { id: 1, title: "Discover Georgia", image: "/tour1_logo.jpg", href: "/tours/discover-georgia", subtitle: "8 days · Tbilisi · Kakheti · Kazbegi", locked: false },
     { id: 2, title: "Wine & Gastronomy", image: "/wine-tour-hero.webp", href: "/tours/wine", subtitle: "Tbilisi · Mtskheta · Kakheti", locked: true },
-    { id: 3, title: "Mountains & Adventure", image: "/tours_2.webp", href: "#", subtitle: "Svaneti · Kazbek · Canyons", locked: true },
-    { id: 4, title: "Ancient Heritage", image: "/tours_3.jpg", href: "#", subtitle: "Kutaisi · Vardzia · Uplistsikhe", locked: true },
+    { id: 3, title: "Mountains & Adventure", image: "/mcheti/mcheti_1.jpg", href: "#", subtitle: "Svaneti · Kazbek · Canyons", locked: true },
+    { id: 4, title: "Ancient Heritage", image: "/samche/2.jpg", href: "#", subtitle: "Kutaisi · Vardzia · Uplistsikhe", locked: true },
   ],
 } as const;
 
@@ -53,7 +53,7 @@ export default function ToursPage() {
     <main className="tours-layout-page">
       <div className="tours-background" aria-hidden="true">
         <Image
-          src="/tours-bg.webp"
+          src="/tours_fon.webp"
           alt=""
           fill
           priority
@@ -68,7 +68,6 @@ export default function ToursPage() {
         <div className="tours-left-desc">
           <span className="eyebrow">{copy.overviewEyebrow}</span>
           <h1>{copy.overviewTitle}</h1>
-          <p>{copy.overviewText}</p>
         </div>
 
         {/* Right Side: 2x2 Grid */}

@@ -5,108 +5,90 @@ import { useState, useEffect, useRef } from "react";
 import { usePreferences } from "../preferences";
 import { SiteHeader } from "../shared";
 
-// Убрали случайную сортировку из глобальной области видимости, чтобы избежать ошибки гидратации (Hydration Mismatch)
-const initialReviewItems = [
-  {
-    src: "/rew_1.jpg",
-    source: "WhatsApp",
-    time: "09:31",
-    author: { en: "Pilgrimage tour guest", ru: "Гость паломнического тура", ua: "Гість паломницького туру" },
-    quote: {
-      en: "The tour was thought through beautifully: snowy mountains, caves, a waterfall, the sea and Georgia's most important sacred places. Thank you for your patience, care and responsibility.",
-      ru: "Тур был продуман идеально: заснеженные горы, пещеры, водопад, море и главные святые места Грузии. Спасибо за терпение, заботу и ответственность.",
-      ua: "Тур був продуманий чудово: засніжені гори, печери, водоспад, море й головні святі місця Грузії. Дякуємо за терпіння, турботу та відповідальність.",
-    },
-  },
-  {
-    src: "/rew_2.jpg",
-    source: "Telegram",
-    time: "15:42",
-    author: { en: "Wine tour participant", ru: "Участник винного тура", ua: "Учасник винного туру" },
-    quote: {
-      en: "We took a wine tour of Kakheti. Breathtaking views of the Alazani Valley, wine tastings at local wineries. Everything was top notch!",
-      ru: "Брали винный тур по Кахетии. Потрясающие виды на Алазанскую долину, дегустации в местных винодельнях. Все было на высшем уровне!",
-      ua: "Брали винний тур по Кахетії. Приголомшливі краєвиди на Алазанську долину, дегустації у місцевих виноробнях. Усе було на найвищому рівні!",
-    },
-  },
-  {
-    src: "/rew_3.jpg",
-    source: "Telegram",
-    time: "11:15",
-    author: { en: "Family from Europe", ru: "Семья из Европы", ua: "Сім'я з Європи" },
-    quote: {
-      en: "Traveled with children, which is always challenging, but the guide organized everything so everyone was interested. Kids loved the masterclass on making churchkhela.",
-      ru: "Путешествовали с детьми, что всегда непросто, но гид организовал всё так, что всем было интересно. Детям очень понравился мастер-класс по чурчхеле.",
-      ua: "Подорожували з дітьми, що завжди непросто, але гід організував усе так, що всім було цікаво. Дітям дуже сподобався майстер-клас із чурчхели.",
-    },
-  },
-  {
-    src: "/rew_4.jpg",
-    source: "WhatsApp",
-    time: "20:05",
-    author: { en: "Corporate group", ru: "Корпоративная группа", ua: "Корпоративна група" },
-    quote: {
-      en: "Organized a corporate retreat for 20 people. Logistics, transfers, accommodation, restaurants - everything was flawless. Thank you for your professionalism!",
-      ru: "Организовывали корпоратив на 20 человек. Логистика, трансферы, проживание, рестораны — всё сработано чётко. Спасибо за профессионализм!",
-      ua: "Організовували корпоратив на 20 осіб. Логістика, трансфери, проживання, ресторани — все спрацьовано чітко. Дякуємо за професіоналізм!",
-    },
-  },
-  {
-    src: "/rew_5.jpg",
-    source: "Telegram",
-    time: "18:20",
-    author: { en: "Solo traveler", ru: "Соло-путешественница", ua: "Соло-мандрівниця" },
-    quote: {
-      en: "I was worried about traveling alone, but the team made my trip incredibly comfortable and safe. Svaneti conquered my heart!",
-      ru: "Переживала ехать одна, но команда сделала мою поездку невероятно комфортной и безопасной. Сванетия покорила моё сердце!",
-      ua: "Хвилювалася їхати сама, але команда зробила мою поїздку неймовірно комфортною та безпечною. Сванетія підкорила моє серце!",
-    },
-  },
-  {
-    src: "/rew_6.jpg",
-    source: "WhatsApp",
-    time: "14:10",
-    author: { en: "Couple from the USA", ru: "Пара из США", ua: "Пара зі США" },
-    quote: {
-      en: "The culinary tour is just something else! We learned how to cook khinkali and khachapuri, and learned a lot about Georgian feast traditions.",
-      ru: "Кулинарный тур — это просто нечто! Мы научились готовить хинкали и хачапури, узнали много нового о традициях грузинского застолья.",
-      ua: "Кулінарний тур — це просто щось! Ми навчилися готувати хінкалі та хачапурі, дізналися багато нового про традиції грузинського застілля.",
-    },
-  },
-  {
-    src: "/rew_7.jpg",
-    source: "Telegram",
-    time: "08:45",
-    author: { en: "Photographer", ru: "Фотограф", ua: "Фотограф" },
-    quote: {
-      en: "As a photographer, finding the right locations is crucial. The guide showed non-touristy, incredibly picturesque spots. Brought back gigabytes of stunning shots.",
-      ru: "Как фотографу, мне было важно найти правильные локации. Гид показал нетуристические, невероятно живописные места. Привез гигабайты шикарных кадров.",
-      ua: "Як фотографу, мені було важливо знайти правильні локації. Гід показав нетуристичні, неймовірно мальовничі місця. Привіз гігабайти шикарних кадров.",
-    },
-  },
-  {
-    src: "/rew_8.jpg",
-    source: "Telegram",
-    time: "21:30",
-    author: { en: "Group of friends", ru: "Компания друзей", ua: "Компанія друзів" },
-    quote: {
-      en: "We had a blast in Batumi! Sea, sun, great food and excellent excursions to waterfalls and historical fortresses. Highly recommend!",
-      ru: "Отлично отдохнули в Батуми! Море, солнце, вкусная еда и отличные экскурсии к водопадам и историческим крепостям. Всем рекомендую!",
-      ua: "Чудово відпочили в Батумі! Море, сонце, смачна їжа і чудові екскурсії до водоспадів та історичних фортець. Всім рекомендую!",
-    },
-  },
-  {
-    src: "/rew_9.jpg",
-    source: "WhatsApp",
-    time: "12:00",
-    author: { en: "Alexey Artemyev", ru: "Алексей Артемьев", ua: "Олексій Артем'єв" },
-    quote: {
-      en: "Please forgive me for not writing immediately after the trip. Our whole group was very happy with the journey!",
-      ru: "Прошу прощения, что не написал сразу после поездки. Вся наша группа осталась очень довольна!",
-      ua: "Перепрошую, що не написав одразу після поїздки. Уся наша група залишилася дуже задоволеною!",
-    },
-  },
+const originalReview = (src: string, source: string, time: string, author: string, text: string) => ({
+  src,
+  source,
+  time,
+  author: { en: author, ru: author, ua: author },
+  quote: { en: text, ru: text, ua: text },
+});
+
+const correctedReviewItems = [
+  originalReview("/rewiev/rew_1.jpg", "WhatsApp", "09:31", "Надежда", "Мы будем ещё долго вас вспоминать и рассказывать о вас, таком замечательном, своим родным и знакомым, будем всем Вас рекомендовать!!! Было бы очень здорово, если следующую группу Вы взяли под своё крыло. Храни Вас Бог! Здоровья, сил и терпения в вашей нелёгкой, но очень интересной и благодатной профессии!"),
+  originalReview("/rewiev/rew_2.jpg", "WhatsApp", "19:55", "Гость тура", "Лучший гид Тбилиси Григорий. Благодаря грамотно составленной программе мы за семь дней увидели самые значимые, красивые места Грузии. Огромное вам спасибо."),
+  originalReview("/rewiev/rew_3.jpg", "WhatsApp", "20:50", "Гость тура", "Хочу выразить огромную благодарность нашим гидам, Григорию и Ирине, за организацию паломничества к святыням Грузии. Видно, что это настоящие профессионалы своего дела, которые любят свою работу! Нас так тепло приняли в этой Богом избранной стране, что не хочется уезжать отсюда. Грузия, ты теперь навсегда в наших сердцах!"),
+  originalReview("/rewiev/rew_4.jpg", "WhatsApp", "19:03", "Андрианова Алена", "Григорий, огромнейшее спасибо Вам за организацию нашего тура! Мы побывали в сказке! Я предполагала, что эмоции будут зашкаливать, но чтобы настолько... Это просто какое-то чудо, что Господь свёл всех нас в этой поездке! Воспоминания останутся надолго! Вы занимаетесь очень благим и нужным делом. Спасибо за всё! Я обязательно ещё вернусь!"),
+  originalReview("/rewiev/rew_5.jpg", "WhatsApp", "17:41", "Гость тура", "Дорогой наш Григорий! Я очень благодарна вам за такую насыщенную программу. Каждый день был продуман до мелочей и подарил столько ярких впечатлений. Я лично полюбила Грузию и с удовольствием приеду ещё раз. Отдельное спасибо за то, что показали нам страну не как туристам, а изнутри — мы познакомились с местной кухней, традициями и людьми. Это было очень тепло и по-настоящему душевно. Это не просто поездка — это история. Низкий вам поклон!"),
+  originalReview("/rewiev/rew_6.jpg", "WhatsApp", "09:45", "Надежда Касъяненко", "От всей души благодарю Вас за организацию такого идеально продуманного тура по Грузии — мы побывали везде: и в заснеженных горах, и в пещерах, и у водопада, и на море! Вы нам показали столько главных святых мест Грузии, рассказали историю их существования, дали возможность к ним приклониться и помолиться! Всегда терпеливо всех дожидали и собирали! Отдельная благодарность Вам за заботу о нас, за ответственность и сердобольность!"),
+  originalReview("/rewiev/rew_7.jpg", "Telegram", "", "Алексей Артемьев", "Доброго времени! Прошу прощения, что сразу не отписал по поездке, у нас группа осталась очень довольна!"),
+  originalReview("/rewiev/rew_8.jpg", "Telegram", "", "Гия Хуцишвили", "Гриша, как круто мы съездили в Тушетию! Спасибо за отличную организацию и атмосферу! Очень понравились твои истории про регион и особенности менталитета горцев! Буду тебя рекомендовать всем своим и чужим."),
+  originalReview("/rewiev/rew_9.jpg", "Telegram", "", "Мария", "Гриша, привет! Пересматриваю фотки из Тушетии и хочу ещё раз сказать спасибо за то, что помог совершить мечту! Было очень красиво, спокойно и по-настоящему душевно."),
+  originalReview("/rewiev/rew_10.jpg", "WhatsApp", "00:01", "Гость тура", "Григорий, от всей души благодарю Вас за потрясающую двухнедельную поездку по Грузии! Это было не просто экскурсионное сопровождение, а настоящее погружение в культуру, историю и святость этой удивительной страны! Программа по знакомству с Грузией была продумана безупречно, где каждое посещение святых мест прекрасно дополнялось красотой природы и вкусом национальных блюд! Всё было организовано чётко, вовремя и с душой! Грузия влюбила в себя раз и навсегда, а Вы сделали это путешествие незабываемым. Спасибо за тёплые воспоминания!"),
 ];
+
+const reviewTranslations = [
+  {
+    en: "We will remember you for a long time and tell our family and friends about you. We will recommend you to everyone! May God protect you and grant you health, strength and patience in your rewarding profession.",
+    ua: "Ми ще довго згадуватимемо вас і розповідатимемо про вас рідним та знайомим. Будемо рекомендувати вас усім! Нехай Бог береже вас і дарує здоров’я, сил і терпіння у вашій благородній професії.",
+  },
+  {
+    en: "Grigory is the best guide in Tbilisi. Thanks to the well-planned programme, in seven days we saw the most important and beautiful places in Georgia. Thank you so much.",
+    ua: "Григорій — найкращий гід у Тбілісі. Завдяки грамотно складеній програмі за сім днів ми побачили найважливіші та найкрасивіші місця Грузії. Щиро дякуємо.",
+  },
+  {
+    en: "I want to express my immense gratitude to our guides, Grigory and Irina, for organising our pilgrimage to Georgia’s holy places. They are true professionals who love their work. Georgia is now forever in our hearts!",
+    ua: "Хочу висловити величезну вдячність нашим гідам, Григорію та Ірині, за організацію паломництва до святинь Грузії. Це справжні професіонали, які люблять свою справу. Грузія назавжди в наших серцях!",
+  },
+  {
+    en: "Grigory, thank you so much for organising our tour! We found ourselves in a fairy tale. The memories will stay with us for a long time. You are doing wonderful and important work. I will definitely return!",
+    ua: "Григорію, величезне спасибі за організацію нашого туру! Ми побували у казці. Ці спогади залишаться надовго. Ви займаєтеся дуже доброю та важливою справою. Я обов’язково ще повернуся!",
+  },
+  {
+    en: "Dear Grigory! Thank you for such a rich programme. Every day was planned down to the smallest detail and brought so many vivid impressions. You showed us the country from within, through its cuisine, traditions and people.",
+    ua: "Дорогий Григорію! Дякую за таку насичену програму. Кожен день був продуманий до дрібниць і подарував безліч яскравих вражень. Ви показали нам країну зсередини, через її кухню, традиції та людей.",
+  },
+  {
+    en: "Thank you from the bottom of my heart for organising such a perfectly planned tour of Georgia. We visited snowy mountains, caves, a waterfall and the sea. Special thanks for your care, responsibility and kindness!",
+    ua: "Від щирого серця дякую за організацію такого чудово продуманого туру Грузією. Ми побували в засніжених горах, печерах, біля водоспаду та на морі. Окрема подяка за турботу, відповідальність і доброту!",
+  },
+  {
+    en: "Good afternoon! Please forgive me for not writing immediately after the trip. Our entire group was very pleased!",
+    ua: "Добрий день! Перепрошую, що не написав одразу після поїздки. Уся наша група залишилася дуже задоволеною!",
+  },
+  {
+    en: "Grisha, our trip to Tusheti was amazing! Thank you for the excellent organisation and atmosphere. I loved your stories about the region and the mentality of the mountain people. I will recommend you to everyone.",
+    ua: "Гриша, як чудово ми з’їздили до Тушетії! Дякую за прекрасну організацію та атмосферу. Дуже сподобалися твої історії про регіон і менталітет горян. Рекомендуватиму тебе всім.",
+  },
+  {
+    en: "Grisha, hello! I am looking through my Tusheti photos and want to thank you once again for helping me fulfil a dream. It was beautiful, peaceful and truly heartfelt.",
+    ua: "Гриша, привіт! Переглядаю фотографії з Тушетії й хочу ще раз подякувати за те, що допоміг здійснити мрію. Було дуже красиво, спокійно й по-справжньому душевно.",
+  },
+  {
+    en: "Grigory, thank you from the bottom of my heart for an amazing two-week journey through Georgia! It was a genuine immersion in the country’s culture and history. Everything was organised clearly, on time and with soul.",
+    ua: "Григорію, від щирого серця дякую за неймовірну двотижневу подорож Грузією! Це було справжнє занурення в культуру та історію країни. Усе було організовано чітко, вчасно й з душею.",
+  },
+] as const;
+
+const localizedReviewItems = correctedReviewItems.map((review, index) => ({
+  ...review,
+  author: {
+    ru: review.author.ru,
+    en: review.author.ru === "Гость тура" ? "Tour guest" : review.author.ru,
+    ua: review.author.ru === "Гость тура" ? "Гість туру" : review.author.ru,
+  },
+  quote: {
+    ru: review.quote.ru,
+    en: reviewTranslations[index].en,
+    ua: reviewTranslations[index].ua,
+  },
+}));
+
+const reviewExcerpt = (text: string, maxLength = 210) => {
+  if (text.length <= maxLength) return text;
+  const excerpt = text.slice(0, maxLength);
+  const lastSpace = excerpt.lastIndexOf(" ");
+  return `${excerpt.slice(0, lastSpace > 0 ? lastSpace : maxLength)}…`;
+};
 
 const reviewsCopy = {
   ru: {
@@ -152,14 +134,9 @@ export default function ReviewsPage() {
   const { language } = usePreferences();
   const copy = reviewsCopy[language];
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [reviewItems, setReviewItems] = useState(initialReviewItems);
+  const reviewItems = localizedReviewItems;
   const marqueeRef = useRef<HTMLDivElement>(null);
   const isHovered = useRef(false);
-
-  // Перемешиваем карточки только на клиенте, чтобы избежать Hydration Error
-  useEffect(() => {
-    setReviewItems([...initialReviewItems].sort(() => Math.random() - 0.5));
-  }, []);
 
   // Javascript-based animation loop that cannot be blocked by CSS caching or OS settings
   useEffect(() => {
@@ -197,7 +174,7 @@ export default function ReviewsPage() {
   }, []);
 
   return (
-    <main className="relative h-screen min-h-[700px] overflow-hidden flex flex-col">
+    <main className="reviews-page relative h-screen min-h-[700px] overflow-hidden flex flex-col">
       <div className="tours-background" aria-hidden="true">
         <Image
           src="/rewiev_fon.jpg"
@@ -210,13 +187,11 @@ export default function ReviewsPage() {
       </div>
       <SiteHeader />
 
-      {/* Version Indicator to verify updates */}
-      <div className="absolute bottom-2 left-2 text-white/50 text-[10px] z-50">v1.3 (JS Anim)</div>
+
 
       <section className="relative z-10 w-full flex-1 flex flex-col justify-center pt-8 md:pt-12 pb-6">
-        <header className="text-center mb-8 px-6 shrink-0">
-          <span className="text-[10px] font-bold tracking-[0.24em] uppercase text-[#8f2f2b]">{copy.eyebrow}</span>
-          <h1 className="mt-3 text-4xl md:text-5xl lg:text-6xl font-serif font-normal text-neutral-900">{copy.title}</h1>
+        <header className="reviews-heading">
+          <h1>{copy.title}</h1>
         </header>
 
         {/* Marquee Wrapper */}
@@ -231,25 +206,25 @@ export default function ReviewsPage() {
               {reviewItems.map((review, index) => (
                 <article
                   key={`r1-${index}`}
-                  className="w-[360px] md:w-[420px] min-h-[420px] md:min-h-[480px] flex flex-col p-8 rounded-[2.5rem] bg-white/60 backdrop-blur-xl border border-white/60 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 shrink-0 mx-3"
+                  className="w-[280px] md:w-[420px] min-h-[340px] md:min-h-[480px] flex flex-col p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] bg-white/60 backdrop-blur-xl border border-white/60 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 shrink-0 mx-2 md:mx-3"
                 >
                   <div className="flex items-center gap-4 mb-6 shrink-0">
-                    <span className={`w-14 h-14 rounded-full flex items-center justify-center text-white ${review.source === 'WhatsApp' ? 'bg-[#25D366]' : 'bg-[#2AABEE]'}`}>
+                    <span className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white ${review.source === 'WhatsApp' ? 'bg-[#25D366]' : 'bg-[#2AABEE]'}`}>
                       <SourceIcon source={review.source} />
                     </span>
                     <div>
-                      <strong className="block font-serif text-lg md:text-xl font-semibold text-neutral-900 leading-tight">{review.source}</strong>
+                      <strong className="block font-serif text-base md:text-xl font-semibold text-neutral-900 leading-tight">{review.source}</strong>
                       <small className="block mt-1 text-[11px] font-bold tracking-widest uppercase text-neutral-900/60">{review.author[language]}</small>
                     </div>
                   </div>
 
-                  <blockquote className="font-serif text-lg md:text-xl leading-relaxed font-normal text-neutral-900 mb-8 flex-1">
-                    “{review.quote[language]}”
+                  <blockquote className="font-serif text-[15px] md:text-xl leading-relaxed font-normal text-neutral-900 mb-6 md:mb-8 flex-1">
+                    “{reviewExcerpt(review.quote[language])}”
                   </blockquote>
 
                   <button 
                     onClick={() => setSelectedImage(review.src)}
-                    className="mt-auto group/btn flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-white/40 border border-white/50 text-neutral-900 font-bold tracking-wide text-sm uppercase hover:bg-white/80 transition-colors shrink-0"
+                    className="mt-auto group/btn flex items-center justify-center gap-2 w-full py-3 md:py-4 rounded-[1rem] md:rounded-2xl bg-white/40 border border-white/50 text-neutral-900 font-bold tracking-wide text-xs md:text-sm uppercase hover:bg-white/80 transition-colors shrink-0"
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover/btn:opacity-100 transition-opacity">
                       <path d="M15 3h6v6" />
@@ -267,25 +242,25 @@ export default function ReviewsPage() {
               {reviewItems.map((review, index) => (
                 <article
                   key={`r2-${index}`}
-                  className="w-[360px] md:w-[420px] min-h-[420px] md:min-h-[480px] flex flex-col p-8 rounded-[2.5rem] bg-white/60 backdrop-blur-xl border border-white/60 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 shrink-0 mx-3"
+                  className="w-[280px] md:w-[420px] min-h-[340px] md:min-h-[480px] flex flex-col p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] bg-white/60 backdrop-blur-xl border border-white/60 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 shrink-0 mx-2 md:mx-3"
                 >
                   <div className="flex items-center gap-4 mb-6 shrink-0">
-                    <span className={`w-14 h-14 rounded-full flex items-center justify-center text-white ${review.source === 'WhatsApp' ? 'bg-[#25D366]' : 'bg-[#2AABEE]'}`}>
+                    <span className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white ${review.source === 'WhatsApp' ? 'bg-[#25D366]' : 'bg-[#2AABEE]'}`}>
                       <SourceIcon source={review.source} />
                     </span>
                     <div>
-                      <strong className="block font-serif text-lg md:text-xl font-semibold text-neutral-900 leading-tight">{review.source}</strong>
+                      <strong className="block font-serif text-base md:text-xl font-semibold text-neutral-900 leading-tight">{review.source}</strong>
                       <small className="block mt-1 text-[11px] font-bold tracking-widest uppercase text-neutral-900/60">{review.author[language]}</small>
                     </div>
                   </div>
 
-                  <blockquote className="font-serif text-lg md:text-xl leading-relaxed font-normal text-neutral-900 mb-8 flex-1">
-                    “{review.quote[language]}”
+                  <blockquote className="font-serif text-[15px] md:text-xl leading-relaxed font-normal text-neutral-900 mb-6 md:mb-8 flex-1">
+                    “{reviewExcerpt(review.quote[language])}”
                   </blockquote>
 
                   <button 
                     onClick={() => setSelectedImage(review.src)}
-                    className="mt-auto group/btn flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-white/40 border border-white/50 text-neutral-900 font-bold tracking-wide text-sm uppercase hover:bg-white/80 transition-colors shrink-0"
+                    className="mt-auto group/btn flex items-center justify-center gap-2 w-full py-3 md:py-4 rounded-[1rem] md:rounded-2xl bg-white/40 border border-white/50 text-neutral-900 font-bold tracking-wide text-xs md:text-sm uppercase hover:bg-white/80 transition-colors shrink-0"
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover/btn:opacity-100 transition-opacity">
                       <path d="M15 3h6v6" />
